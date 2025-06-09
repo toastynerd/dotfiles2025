@@ -1,4 +1,4 @@
-#\!/bin/bash
+#!/bin/bash
 
 set -e
 
@@ -10,7 +10,7 @@ echo "from GitHub without requiring any pre-installed tools."
 echo ""
 
 # Check if we're on macOS
-if [[ "$OSTYPE" \!= "darwin"* ]]; then
+if [[ "$OSTYPE" != "darwin"* ]]; then
     echo "ERROR: This script is designed for macOS only"
     exit 1
 fi
@@ -18,7 +18,7 @@ fi
 # Prompt for confirmation
 read -p "Do you want to proceed with setting up your MacBook? (y/N): " -n 1 -r
 echo
-if [[ \! $REPLY =~ ^[Yy]$ ]]; then
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo "Setup cancelled"
     exit 1
 fi
@@ -44,7 +44,7 @@ ditto -xk dotfiles.zip .
 # Find the extracted directory (it will be named dotfiles2025-master)
 REPO_DIR="$TEMP_DIR/dotfiles2025-master"
 
-if [[ \! -d "$REPO_DIR" ]]; then
+if [[ ! -d "$REPO_DIR" ]]; then
     echo "ERROR: Failed to extract repository"
     exit 1
 fi
@@ -63,7 +63,7 @@ cd "$REPO_DIR"
 
 # Ask if user wants to keep the files or move them to a permanent location
 echo ""
-echo "Setup complete\! What would you like to do with the dotfiles?"
+echo "Setup complete! What would you like to do with the dotfiles?"
 echo "1) Move them to ~/dotfiles2025 (recommended)"
 echo "2) Move them to a custom location"
 echo "3) Leave them in temporary directory (will be deleted on reboot)"
@@ -123,7 +123,7 @@ cd /
 rm -f "$TEMP_DIR/dotfiles.zip"
 
 echo ""
-echo "Bootstrap complete\!"
+echo "Bootstrap complete!"
 echo "=================="
 echo ""
 echo "Important next steps:"
@@ -137,5 +137,4 @@ echo "     - Google Cloud: gcloud init"
 echo "  5. Set up your API keys in ~/programming/anthropic_api_key if needed"
 echo "  6. Run 'nvim' to let lazy.nvim install plugins"
 echo ""
-echo "SUCCESS: Your MacBook is now ready for development\!"
-EOF < /dev/null
+echo "SUCCESS: Your MacBook is now ready for development!"
