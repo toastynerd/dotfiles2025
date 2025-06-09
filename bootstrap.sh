@@ -1,4 +1,4 @@
-#!/bin/bash
+#\!/bin/bash
 
 set -e
 
@@ -10,15 +10,15 @@ echo "from GitHub without requiring any pre-installed tools."
 echo ""
 
 # Check if we're on macOS
-if [[ "$OSTYPE" != "darwin"* ]]; then
-    echo "This script is designed for macOS only"
+if [[ "$OSTYPE" \!= "darwin"* ]]; then
+    echo "ERROR: This script is designed for macOS only"
     exit 1
 fi
 
 # Prompt for confirmation
 read -p "Do you want to proceed with setting up your MacBook? (y/N): " -n 1 -r
 echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+if [[ \! $REPLY =~ ^[Yy]$ ]]; then
     echo "Setup cancelled"
     exit 1
 fi
@@ -44,8 +44,8 @@ ditto -xk dotfiles.zip .
 # Find the extracted directory (it will be named dotfiles2025-master)
 REPO_DIR="$TEMP_DIR/dotfiles2025-master"
 
-if [[ ! -d "$REPO_DIR" ]]; then
-    echo "Failed to extract repository"
+if [[ \! -d "$REPO_DIR" ]]; then
+    echo "ERROR: Failed to extract repository"
     exit 1
 fi
 
@@ -63,7 +63,7 @@ cd "$REPO_DIR"
 
 # Ask if user wants to keep the files or move them to a permanent location
 echo ""
-echo "Setup complete! What would you like to do with the dotfiles?"
+echo "Setup complete\! What would you like to do with the dotfiles?"
 echo "1) Move them to ~/dotfiles2025 (recommended)"
 echo "2) Move them to a custom location"
 echo "3) Leave them in temporary directory (will be deleted on reboot)"
@@ -87,13 +87,13 @@ case $REPLY in
         ln -s "$FINAL_DIR/zshrc" ~/.zshrc
         ln -s "$FINAL_DIR/nvim" ~/.config/nvim
         
-        echo "Dotfiles moved to $FINAL_DIR"
+        echo "SUCCESS: Dotfiles moved to $FINAL_DIR"
         ;;
     2)
         read -p "Enter the full path where you want to store dotfiles: " FINAL_DIR
         if [[ -d "$FINAL_DIR" ]]; then
-            echo "Directory already exists: $FINAL_DIR"
-            echo "Dotfiles remain in temporary directory: $REPO_DIR"
+            echo "ERROR: Directory already exists: $FINAL_DIR"
+            echo "INFO: Dotfiles remain in temporary directory: $REPO_DIR"
         else
             echo "Moving dotfiles to $FINAL_DIR"
             mv "$REPO_DIR" "$FINAL_DIR"
@@ -104,15 +104,15 @@ case $REPLY in
             ln -s "$FINAL_DIR/zshrc" ~/.zshrc
             ln -s "$FINAL_DIR/nvim" ~/.config/nvim
             
-            echo "Dotfiles moved to $FINAL_DIR"
+            echo "SUCCESS: Dotfiles moved to $FINAL_DIR"
         fi
         ;;
     3)
-        echo "Dotfiles remain in temporary directory: $REPO_DIR"
-        echo "This directory will be deleted when you reboot"
+        echo "INFO: Dotfiles remain in temporary directory: $REPO_DIR"
+        echo "WARNING: This directory will be deleted when you reboot"
         ;;
     *)
-        echo "Invalid option. Dotfiles remain in temporary directory: $REPO_DIR"
+        echo "ERROR: Invalid option. Dotfiles remain in temporary directory: $REPO_DIR"
         ;;
 esac
 
@@ -123,7 +123,7 @@ cd /
 rm -f "$TEMP_DIR/dotfiles.zip"
 
 echo ""
-echo "Bootstrap complete!"
+echo "Bootstrap complete\!"
 echo "=================="
 echo ""
 echo "Important next steps:"
@@ -137,4 +137,5 @@ echo "     - Google Cloud: gcloud init"
 echo "  5. Set up your API keys in ~/programming/anthropic_api_key if needed"
 echo "  6. Run 'nvim' to let lazy.nvim install plugins"
 echo ""
-echo "Your MacBook is now ready for development!"
+echo "SUCCESS: Your MacBook is now ready for development\!"
+EOF < /dev/null
