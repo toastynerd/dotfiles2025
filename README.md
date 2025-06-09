@@ -10,7 +10,10 @@ Personal development environment configuration for macOS.
 - **Colorscheme**: Tokyo Night theme with proper 24-bit color support
 - **Status Line**: Lualine with git branch, file path, and diff indicators
 - **GitHub Copilot**: AI-powered code completion (Ctrl+J to accept)
+- **Copilot Chat**: AI assistant for code explanation and optimization
 - **Auto-pairs**: Automatic bracket and quote completion
+- **File Tree**: nvim-tree explorer with git status indicators
+- **Cross-platform Clipboard**: Copy to system clipboard from visual mode
 - **Nerd Font**: FiraCode Nerd Font for proper icon display
 - **Automated Setup**: One-command installation script
 
@@ -25,6 +28,7 @@ cd dotfiles2025
 The setup script will:
 - Install Homebrew (if needed)
 - Install Neovim (if needed)
+- Install Node.js (required for Copilot)
 - Install language servers for multiple languages
 - Install FiraCode Nerd Font for proper icon display
 - Create symlinks from `~/.config/nvim` to this repo
@@ -48,6 +52,22 @@ For best experience:
 
 2. **Set Font in iTerm2**: Go to iTerm2 → Preferences → Profiles → Text → Font and select "FiraCode Nerd Font"
 
+## Key Bindings
+
+### File Management
+- **`Space + e`** - Toggle file tree
+- **`Space + f`** - Find current file in tree
+
+### AI Assistance
+- **`Ctrl + J`** - Accept Copilot suggestion (insert mode)
+- **`Space + cc`** - Open Copilot Chat
+- **`Space + ce`** - Explain selected code (visual mode)
+- **`Space + cf`** - Fix selected code (visual mode)
+- **`Space + co`** - Optimize selected code (visual mode)
+
+### Clipboard
+- **`Space + z`** - Copy visual selection to system clipboard
+
 ## Structure
 
 ```
@@ -55,11 +75,11 @@ nvim/
 ├── config/
 │   └── lazy.lua          # Lazy.nvim plugin manager setup
 ├── plugins/
-│   ├── completion.lua    # GitHub Copilot + auto-pairs
+│   ├── completion.lua    # GitHub Copilot + Copilot Chat + auto-pairs + clipboard
 │   ├── lsp.lua          # Language server configuration (empty - using external LSPs)
 │   ├── syntax.lua       # Treesitter syntax highlighting
-│   └── visual.lua       # Tokyo Night colorscheme + Lualine status bar
-└── init.lua             # Main nvim configuration
+│   └── visual.lua       # Tokyo Night colorscheme + Lualine status bar + file tree
+└── init.lua             # Main nvim configuration + clipboard settings
 ```
 
 ## Manual Installation
@@ -68,7 +88,7 @@ If you prefer to set up manually:
 
 1. Install dependencies:
    ```bash
-   brew install neovim lua-language-server typescript-language-server solargraph pyright
+   brew install neovim node lua-language-server typescript-language-server solargraph pyright
    brew install --cask font-fira-code-nerd-font
    ```
 
