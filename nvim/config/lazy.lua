@@ -23,7 +23,6 @@ vim.g.maplocalleader = "\\"
 
 -- Setup lazy.nvim
 local plugins = {}
-vim.list_extend(plugins, require("plugins.completion"))
 vim.list_extend(plugins, require("plugins.syntax"))
 vim.list_extend(plugins, require("plugins.visual"))
 

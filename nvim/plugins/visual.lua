@@ -1,17 +1,10 @@
 return {
-  -- gruvbox.nvim
+  -- Default colorscheme
   {
-    "ellisonleao/gruvbox.nvim",
+    "folke/tokyonight.nvim",
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme("gruvbox")
-    end
-  },
-  -- lualine.nvim
-  {
-    "nvim-lualine/lualine.nvim",
-    config = function()
-      require("lualine").setup()
+      vim.cmd.colorscheme("tokyonight-night")
     end
   }
 }
