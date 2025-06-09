@@ -8,7 +8,10 @@ vim.opt.background = "dark"
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = "yes"
+vim.opt.clipboard = "unnamed"
 
 -- Add config directory to Lua path
 package.path = package.path .. ";" .. vim.fn.stdpath("config") .. "/?.lua"
+
+
 require("config.lazy")
