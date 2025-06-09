@@ -7,7 +7,11 @@ Personal development environment configuration for macOS.
 - **Neovim Configuration**: Modern nvim setup with LSP support
 - **Language Support**: TypeScript, JavaScript, Ruby, Python, Lua
 - **Syntax Highlighting**: Treesitter-powered highlighting
-- **Colorscheme**: Tokyo Night theme
+- **Colorscheme**: Tokyo Night theme with proper 24-bit color support
+- **Status Line**: Lualine with git branch, file path, and diff indicators
+- **GitHub Copilot**: AI-powered code completion (Ctrl+J to accept)
+- **Auto-pairs**: Automatic bracket and quote completion
+- **Nerd Font**: FiraCode Nerd Font for proper icon display
 - **Automated Setup**: One-command installation script
 
 ## Quick Start
@@ -22,6 +26,7 @@ The setup script will:
 - Install Homebrew (if needed)
 - Install Neovim (if needed)
 - Install language servers for multiple languages
+- Install FiraCode Nerd Font for proper icon display
 - Create symlinks from `~/.config/nvim` to this repo
 - Backup existing nvim config to `~/.config/nvim.backup`
 
@@ -32,12 +37,16 @@ The setup script will:
 - **solargraph** - Ruby/Rails
 - **pyright** - Python
 
-## Recommended Terminal
+## Recommended Terminal Setup
 
-For best color support, use iTerm2 instead of macOS Terminal:
-```bash
-brew install --cask iterm2
-```
+For best experience:
+
+1. **Use iTerm2** for proper 24-bit color support (macOS Terminal has poor color handling):
+   ```bash
+   brew install --cask iterm2
+   ```
+
+2. **Set Font in iTerm2**: Go to iTerm2 → Preferences → Profiles → Text → Font and select "FiraCode Nerd Font"
 
 ## Structure
 
@@ -46,10 +55,10 @@ nvim/
 ├── config/
 │   └── lazy.lua          # Lazy.nvim plugin manager setup
 ├── plugins/
-│   ├── completion.lua    # Completion configuration
-│   ├── lsp.lua          # Language server configuration
+│   ├── completion.lua    # GitHub Copilot + auto-pairs
+│   ├── lsp.lua          # Language server configuration (empty - using external LSPs)
 │   ├── syntax.lua       # Treesitter syntax highlighting
-│   └── visual.lua       # Colorscheme and UI
+│   └── visual.lua       # Tokyo Night colorscheme + Lualine status bar
 └── init.lua             # Main nvim configuration
 ```
 
@@ -60,6 +69,7 @@ If you prefer to set up manually:
 1. Install dependencies:
    ```bash
    brew install neovim lua-language-server typescript-language-server solargraph pyright
+   brew install --cask font-fira-code-nerd-font
    ```
 
 2. Create symlink:

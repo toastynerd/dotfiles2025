@@ -27,6 +27,15 @@ else
     echo "✅ Neovim already installed"
 fi
 
+# Install Nerd Font for icons
+echo "🔤 Installing Nerd Font for icons..."
+if ! brew list --cask font-fira-code-nerd-font &> /dev/null; then
+    echo "📥 Installing FiraCode Nerd Font..."
+    brew install --cask font-fira-code-nerd-font
+else
+    echo "✅ FiraCode Nerd Font already installed"
+fi
+
 # Install language servers
 echo "🔧 Installing language servers..."
 
@@ -72,6 +81,7 @@ echo ""
 echo "📋 Installed components:"
 echo "  • Homebrew"
 echo "  • Neovim"
+echo "  • FiraCode Nerd Font (for icons)"
 echo "  • Language servers:"
 echo "    - lua-language-server (Lua)"
 echo "    - typescript-language-server (TypeScript/JavaScript)"

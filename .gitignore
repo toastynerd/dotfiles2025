@@ -1,0 +1,5 @@
+# Test files
+test.*
+
+# Claude Code context
+CLAUDE.md

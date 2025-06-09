@@ -9,4 +9,6 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn = "yes"
 
+-- Add config directory to Lua path
+package.path = package.path .. ";" .. vim.fn.stdpath("config") .. "/?.lua"
 require("config.lazy")
