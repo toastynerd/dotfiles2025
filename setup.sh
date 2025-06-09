@@ -36,6 +36,14 @@ else
     echo "✅ FiraCode Nerd Font already installed"
 fi
 
+# Install Node.js if not present (required for Copilot)
+if ! command -v node &> /dev/null; then
+    echo "📦 Installing Node.js..."
+    brew install node
+else
+    echo "✅ Node.js already installed"
+fi
+
 # Install language servers
 echo "🔧 Installing language servers..."
 
