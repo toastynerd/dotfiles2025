@@ -19,13 +19,21 @@ Personal development environment configuration for macOS.
 
 ## Quick Start
 
+### Option 1: Fresh MacBook (No Tools Installed)
+Run this single command in Terminal on a brand new Mac:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/toastynerd/dotfiles2025/master/bootstrap.sh | bash
+```
+
+### Option 2: If You Already Have Git
 ```bash
 git clone https://github.com/toastynerd/dotfiles2025.git
 cd dotfiles2025
-./setup.sh
+./provision.sh
 ```
 
-The setup script will:
+Both methods will:
 - Install Homebrew (if needed)
 - Install Neovim (if needed)
 - Install Node.js (required for Copilot)
