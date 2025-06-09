@@ -105,7 +105,6 @@ echo "📱 Installing applications..."
 declare -a apps=(
     "iterm2"
     "docker"
-    "claude-code"
     "tuple"
     "slack"
     "font-fira-code-nerd-font"
@@ -119,6 +118,15 @@ for app in "${apps[@]}"; do
         echo "✅ $app already installed"
     fi
 done
+
+# Install Claude Code via npm (official method)
+echo "💻 Installing Claude Code..."
+if ! command -v claude &> /dev/null; then
+    echo "📥 Installing Claude Code via npm..."
+    npm install -g @anthropic-ai/claude-code
+else
+    echo "✅ Claude Code already installed"
+fi
 
 # ============================================================================
 # ZSH AND OH-MY-ZSH SETUP
@@ -258,37 +266,86 @@ echo ""
 echo "🎉 MacBook Pro setup complete!"
 echo "=============================="
 echo ""
-echo "📋 Installed components:"
-echo "  🍺 Homebrew package manager"
-echo "  🔧 Git + GitHub CLI (gh)"
-echo "  ☁️ AWS CLI"
-echo "  🌐 Google Cloud SDK"
-echo "  📦 Node.js (via nodenv) + latest stable version"
-echo "  🐳 Docker Desktop"
-echo "  💻 Claude Code"
-echo "  📺 iTerm2 (configured)"
-echo "  🎯 Tuple"
-echo "  💬 Slack"
-echo "  📝 Neovim (fully configured)"
-echo "  🔤 FiraCode Nerd Font"
-echo "  🐚 Zsh + Oh My Zsh"
-echo "  🔧 Language servers: Lua, TypeScript, Ruby, Python"
+
+# Generate detailed summary
+echo "📊 INSTALLATION SUMMARY"
+echo "======================="
 echo ""
-echo "🔗 Symlinks created:"
-echo "  • ~/.zshrc -> $SCRIPT_DIR/zshrc"
-echo "  • ~/.config/nvim -> $SCRIPT_DIR/nvim"
+
+# Check what was actually installed/configured
+echo "🛠️  CORE DEVELOPMENT TOOLS:"
+if command -v brew &> /dev/null; then echo "  ✅ Homebrew package manager"; fi
+if command -v git &> /dev/null; then echo "  ✅ Git $(git --version | cut -d' ' -f3)"; fi
+if command -v gh &> /dev/null; then echo "  ✅ GitHub CLI $(gh --version | head -1 | cut -d' ' -f3)"; fi
+if command -v node &> /dev/null; then echo "  ✅ Node.js $(node --version) (via nodenv)"; fi
+if command -v aws &> /dev/null; then echo "  ✅ AWS CLI $(aws --version | cut -d' ' -f1 | cut -d'/' -f2)"; fi
+if command -v gcloud &> /dev/null; then echo "  ✅ Google Cloud SDK $(gcloud --version | head -1 | cut -d' ' -f4)"; fi
+
 echo ""
-echo "📝 Configuration files saved:"
-echo "  • iTerm2 preferences -> $SCRIPT_DIR/iterm2-preferences.plist"
+echo "📱 APPLICATIONS:"
+if [[ -d "/Applications/iTerm.app" ]]; then echo "  ✅ iTerm2 (configured with custom preferences)"; fi
+if [[ -d "/Applications/Docker.app" ]]; then echo "  ✅ Docker Desktop"; fi
+if command -v claude &> /dev/null; then echo "  ✅ Claude Code ($(claude --version | head -1))"; fi
+if [[ -d "/Applications/Tuple.app" ]]; then echo "  ✅ Tuple"; fi
+if [[ -d "/Applications/Slack.app" ]]; then echo "  ✅ Slack"; fi
+
 echo ""
-echo "⚠️  Post-setup actions required:"
-echo "  1. Restart your terminal or run: source ~/.zshrc"
-echo "  2. Open iTerm2 and set font to 'FiraCode Nerd Font' if not already set"
-echo "  3. Start Docker Desktop if not already running"
-echo "  4. Set up your Anthropic API key file if needed: ~/programming/anthropic_api_key"
-echo "  5. Run 'nvim' to let lazy.nvim install plugins on first launch"
-echo "  6. Configure GitHub CLI: gh auth login"
-echo "  7. Configure AWS CLI: aws configure"
-echo "  8. Configure Google Cloud: gcloud init"
+echo "📝 DEVELOPMENT ENVIRONMENT:"
+if command -v nvim &> /dev/null; then echo "  ✅ Neovim $(nvim --version | head -1 | cut -d' ' -f2)"; fi
+if [[ -L ~/.config/nvim ]]; then echo "    ├── Symlinked to: $(readlink ~/.config/nvim)"; fi
+if command -v lua-language-server &> /dev/null; then echo "    ├── Lua Language Server"; fi
+if command -v typescript-language-server &> /dev/null; then echo "    ├── TypeScript Language Server"; fi
+if command -v solargraph &> /dev/null; then echo "    ├── Solargraph (Ruby)"; fi
+if command -v pyright &> /dev/null; then echo "    ├── Pyright (Python)"; fi
+echo "    ├── Tokyo Night colorscheme"
+echo "    ├── Lualine status bar"
+echo "    ├── GitHub Copilot + Chat"
+echo "    ├── File tree explorer"
+echo "    ├── Cross-platform clipboard"
+echo "    └── Auto-pairs"
+
+echo ""
+echo "🐚 SHELL CONFIGURATION:"
+if [[ "$SHELL" == *"zsh"* ]]; then echo "  ✅ Zsh (default shell)"; fi
+if [[ -d ~/.oh-my-zsh ]]; then echo "  ✅ Oh My Zsh"; fi
+if [[ -L ~/.zshrc ]]; then echo "  ✅ Custom .zshrc symlinked to: $(readlink ~/.zshrc)"; fi
+
+echo ""
+echo "🔤 FONTS:"
+if fc-list | grep -i "firacode" &> /dev/null || system_profiler SPFontsDataType | grep -i "firacode" &> /dev/null 2>/dev/null; then
+    echo "  ✅ FiraCode Nerd Font"
+fi
+
+echo ""
+echo "🔗 SYMLINKS CREATED:"
+if [[ -L ~/.zshrc ]]; then echo "  • ~/.zshrc -> $(readlink ~/.zshrc)"; fi
+if [[ -L ~/.config/nvim ]]; then echo "  • ~/.config/nvim -> $(readlink ~/.config/nvim)"; fi
+
+echo ""
+echo "📝 CONFIGURATION FILES:"
+if [[ -f "$SCRIPT_DIR/iterm2-preferences.plist" ]]; then echo "  • iTerm2 preferences -> $SCRIPT_DIR/iterm2-preferences.plist"; fi
+if [[ -f "$SCRIPT_DIR/zshrc" ]]; then echo "  • Zsh configuration -> $SCRIPT_DIR/zshrc"; fi
+if [[ -d "$SCRIPT_DIR/nvim" ]]; then echo "  • Neovim configuration -> $SCRIPT_DIR/nvim/"; fi
+
+echo ""
+echo "⚠️  POST-SETUP ACTIONS REQUIRED:"
+echo "================================"
+echo "1. 🔄 Restart your terminal or run: source ~/.zshrc"
+echo "2. 📺 Open iTerm2 and verify font is 'FiraCode Nerd Font'"
+echo "3. 🐳 Start Docker Desktop if not running"
+echo "4. 🔑 Set up your API keys:"
+echo "   • Create ~/programming/anthropic_api_key for Claude Code"
+echo "5. 🔐 Configure your cloud tools:"
+echo "   • GitHub CLI: gh auth login"
+echo "   • AWS CLI: aws configure"
+echo "   • Google Cloud: gcloud init"
+echo "6. 📝 Run 'nvim' to let lazy.nvim install plugins on first launch"
 echo ""
 echo "✨ Your MacBook Pro is now ready for development!"
+echo ""
+echo "🚀 Quick test commands:"
+echo "  • nvim --version"
+echo "  • claude --help"
+echo "  • node --version"
+echo "  • git --version"
+echo ""
