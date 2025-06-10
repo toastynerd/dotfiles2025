@@ -57,6 +57,8 @@ declare -a cli_tools=(
     "tree"
     "htop"
     "nodenv"
+    "rbenv"
+    "ruby-build"
     "neovim"
     "awscli"
     "google-cloud-sdk"
@@ -93,6 +95,29 @@ if ! command -v node &> /dev/null; then
     nodenv rehash
 else
     echo "✅ Node.js already installed"
+fi
+
+# ============================================================================
+# RUBY SETUP WITH RBENV
+# ============================================================================
+
+echo "💎 Setting up Ruby with rbenv..."
+
+# Initialize rbenv if not already done
+if [[ ! -d "$HOME/.rbenv" ]]; then
+    echo "🔧 Initializing rbenv..."
+    rbenv init
+fi
+
+# Install latest stable Ruby
+if ! command -v ruby &> /dev/null || [[ "$(ruby --version)" == *"2.6"* ]]; then
+    echo "📥 Installing latest stable Ruby..."
+    LATEST_RUBY=$(rbenv install -l | grep -E "^\s*[0-9]+\.[0-9]+\.[0-9]+$" | tail -1 | tr -d ' ')
+    rbenv install "$LATEST_RUBY"
+    rbenv global "$LATEST_RUBY"
+    rbenv rehash
+else
+    echo "✅ Ruby already installed and up to date"
 fi
 
 # ============================================================================
@@ -176,23 +201,8 @@ ln -s "$SCRIPT_DIR/zshrc" "$HOME/.zshrc"
 
 echo "📝 Setting up Neovim..."
 
-# Install language servers
-declare -a servers=(
-    "lua-language-server"
-    "typescript-language-server" 
-    "solargraph"
-    "pyright"
-)
-
-echo "🔧 Installing language servers..."
-for server in "${servers[@]}"; do
-    if ! command -v "$server" &> /dev/null; then
-        echo "📥 Installing $server..."
-        brew install "$server"
-    else
-        echo "✅ $server already installed"
-    fi
-done
+# Language servers are now managed by mason.nvim (no manual installation needed)
+echo "🔧 Language servers will be automatically installed by mason.nvim when you open nvim"
 
 # Create config directory if it doesn't exist
 mkdir -p ~/.config
@@ -278,6 +288,7 @@ if command -v brew &> /dev/null; then echo "  ✅ Homebrew package manager"; fi
 if command -v git &> /dev/null; then echo "  ✅ Git $(git --version | cut -d' ' -f3)"; fi
 if command -v gh &> /dev/null; then echo "  ✅ GitHub CLI $(gh --version | head -1 | cut -d' ' -f3)"; fi
 if command -v node &> /dev/null; then echo "  ✅ Node.js $(node --version) (via nodenv)"; fi
+if command -v ruby &> /dev/null; then echo "  ✅ Ruby $(ruby --version | cut -d' ' -f2) (via rbenv)"; fi
 if command -v aws &> /dev/null; then echo "  ✅ AWS CLI $(aws --version | cut -d' ' -f1 | cut -d'/' -f2)"; fi
 if command -v gcloud &> /dev/null; then echo "  ✅ Google Cloud SDK $(gcloud --version | head -1 | cut -d' ' -f4)"; fi
 
@@ -293,10 +304,8 @@ echo ""
 echo "📝 DEVELOPMENT ENVIRONMENT:"
 if command -v nvim &> /dev/null; then echo "  ✅ Neovim $(nvim --version | head -1 | cut -d' ' -f2)"; fi
 if [[ -L ~/.config/nvim ]]; then echo "    ├── Symlinked to: $(readlink ~/.config/nvim)"; fi
-if command -v lua-language-server &> /dev/null; then echo "    ├── Lua Language Server"; fi
-if command -v typescript-language-server &> /dev/null; then echo "    ├── TypeScript Language Server"; fi
-if command -v solargraph &> /dev/null; then echo "    ├── Solargraph (Ruby)"; fi
-if command -v pyright &> /dev/null; then echo "    ├── Pyright (Python)"; fi
+echo "    ├── Mason.nvim (auto-installs language servers)"
+echo "    ├── LSP support (Lua, TypeScript, Ruby, Python)"
 echo "    ├── Tokyo Night colorscheme"
 echo "    ├── Lualine status bar"
 echo "    ├── GitHub Copilot + Chat"

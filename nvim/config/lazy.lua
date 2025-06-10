@@ -26,6 +26,7 @@ local plugins = {}
 vim.list_extend(plugins, require("plugins.syntax"))
 vim.list_extend(plugins, require("plugins.visual"))
 vim.list_extend(plugins, require("plugins.completion"))
+vim.list_extend(plugins, require("plugins.lsp"))
 
 require("lazy").setup({
   spec = plugins,

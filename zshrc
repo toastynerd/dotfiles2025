@@ -31,6 +31,13 @@ if command -v nodenv > /dev/null; then
     }
 fi
 
+# Rbenv setup
+eval export PATH="/Users/$USER/.rbenv/shims:${PATH}"
+export RBENV_SHELL=zsh
+if command -v rbenv > /dev/null; then
+    eval "$(rbenv init - zsh)"
+fi
+
 # Google Cloud SDK setup
 if [[ -f "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc" ]]; then
     source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"

@@ -42,12 +42,16 @@ Both methods will:
 - Create symlinks from `~/.config/nvim` to this repo
 - Backup existing nvim config to `~/.config/nvim.backup`
 
-## Language Servers Included
+## Language Servers (Auto-Installed by Mason)
 
-- **lua-language-server** - Lua
-- **typescript-language-server** - TypeScript/JavaScript
+Mason.nvim automatically installs and manages language servers when you open files:
+
+- **lua_ls** - Lua (with Neovim configuration)
+- **tsserver** - TypeScript/JavaScript
 - **solargraph** - Ruby/Rails
 - **pyright** - Python
+
+No manual installation required! Just open a file and Mason handles the rest.
 
 ## Recommended Terminal Setup
 
@@ -76,6 +80,13 @@ For best experience:
 ### Clipboard
 - **`Space + z`** - Copy visual selection to system clipboard
 
+### LSP (Language Server Protocol)
+- **`gd`** - Go to definition
+- **`K`** - Show hover documentation
+- **`Space + rn`** - Rename symbol
+- **`Space + ca`** - Code actions
+- **`gr`** - Find references
+
 ## Structure
 
 ```
@@ -84,7 +95,7 @@ nvim/
 │   └── lazy.lua          # Lazy.nvim plugin manager setup
 ├── plugins/
 │   ├── completion.lua    # GitHub Copilot + Copilot Chat + auto-pairs + clipboard
-│   ├── lsp.lua          # Language server configuration (empty - using external LSPs)
+│   ├── lsp.lua          # Mason + LSP configuration with auto-installation
 │   ├── syntax.lua       # Treesitter syntax highlighting
 │   └── visual.lua       # Tokyo Night colorscheme + Lualine status bar + file tree
 └── init.lua             # Main nvim configuration + clipboard settings
@@ -96,7 +107,7 @@ If you prefer to set up manually:
 
 1. Install dependencies:
    ```bash
-   brew install neovim node lua-language-server typescript-language-server solargraph pyright
+   brew install neovim node
    brew install --cask font-fira-code-nerd-font
    ```
 
