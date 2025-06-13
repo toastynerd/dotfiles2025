@@ -27,6 +27,8 @@ vim.list_extend(plugins, require("plugins.syntax"))
 vim.list_extend(plugins, require("plugins.visual"))
 vim.list_extend(plugins, require("plugins.completion"))
 vim.list_extend(plugins, require("plugins.lsp"))
+vim.list_extend(plugins, require("plugins.telescope"))
+vim.list_extend(plugins, require("plugins.help"))
 
 require("lazy").setup({
   spec = plugins,
