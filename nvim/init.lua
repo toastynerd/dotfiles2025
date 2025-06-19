@@ -6,7 +6,7 @@ vim.cmd('syntax reset')
 vim.opt.termguicolors = true
 vim.opt.background = "dark"
 vim.opt.number = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber = false
 vim.opt.signcolumn = "yes"
 vim.opt.clipboard = "unnamed"
 
