@@ -27,6 +27,14 @@ else
     echo "✅ Neovim already installed"
 fi
 
+# Install tmux if not present
+if ! command -v tmux &> /dev/null; then
+    echo "🖥️  Installing tmux..."
+    brew install tmux
+else
+    echo "✅ tmux already installed"
+fi
+
 # Install Nerd Font for icons
 echo "🔤 Installing Nerd Font for icons..."
 if ! brew list --cask font-fira-code-nerd-font &> /dev/null; then
@@ -42,6 +50,14 @@ if ! command -v node &> /dev/null; then
     brew install node
 else
     echo "✅ Node.js already installed"
+fi
+
+# Install Prettier globally
+if ! command -v prettier &> /dev/null; then
+    echo "💅 Installing Prettier..."
+    npm install -g prettier
+else
+    echo "✅ Prettier already installed"
 fi
 
 # Install language servers
@@ -83,12 +99,29 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "🔗 Creating symlink from ~/.config/nvim to $SCRIPT_DIR/nvim"
 ln -s "$SCRIPT_DIR/nvim" ~/.config/nvim
 
+# Backup existing tmux config if present
+if [[ -f ~/.tmux.conf ]] && [[ ! -L ~/.tmux.conf ]]; then
+    echo "📋 Backing up existing tmux config to ~/.tmux.conf.backup"
+    mv ~/.tmux.conf ~/.tmux.conf.backup
+fi
+
+# Remove symlink if it exists
+if [[ -L ~/.tmux.conf ]]; then
+    echo "🔗 Removing existing tmux symlink"
+    rm ~/.tmux.conf
+fi
+
+# Create symlink to this repo's tmux config
+echo "🔗 Creating symlink from ~/.tmux.conf to $SCRIPT_DIR/tmux.conf"
+ln -s "$SCRIPT_DIR/tmux.conf" ~/.tmux.conf
+
 echo ""
 echo "🎉 Setup complete!"
 echo ""
 echo "📋 Installed components:"
 echo "  • Homebrew"
 echo "  • Neovim"
+echo "  • tmux"
 echo "  • FiraCode Nerd Font (for icons)"
 echo "  • Language servers:"
 echo "    - lua-language-server (Lua)"
@@ -98,5 +131,6 @@ echo "    - pyright (Python)"
 echo ""
 echo "🔗 Symlinks created:"
 echo "  • ~/.config/nvim -> $SCRIPT_DIR/nvim"
+echo "  • ~/.tmux.conf -> $SCRIPT_DIR/tmux.conf"
 echo ""
 echo "✨ Your development environment is ready!"

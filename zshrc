@@ -9,34 +9,8 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
-# Nodenv setup
-eval export PATH="/Users/$USER/.nodenv/shims:${PATH}"
-export NODENV_SHELL=zsh
-if command -v nodenv > /dev/null; then
-    source "$(brew --prefix nodenv)/completions/nodenv.zsh"
-    command nodenv rehash 2>/dev/null
-    nodenv() {
-      local command
-      command="${1:-}"
-      if [ "$#" -gt 0 ]; then
-        shift
-      fi
-
-      case "$command" in
-      rehash|shell)
-        eval "$(nodenv "sh-$command" "$@")";;
-      *)
-        command nodenv "$command" "$@";;
-      esac
-    }
-fi
-
-# Rbenv setup
-eval export PATH="/Users/$USER/.rbenv/shims:${PATH}"
-export RBENV_SHELL=zsh
-if command -v rbenv > /dev/null; then
-    eval "$(rbenv init - zsh)"
-fi
+# Homebrew path
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Google Cloud SDK setup
 if [[ -f "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc" ]]; then
@@ -48,11 +22,13 @@ fi
 
 # API Keys (customize as needed)
 if [[ -f "$HOME/programming/anthropic_api_key" ]]; then
-    export ANTHROPIC_API_KEY=$(cat $HOME/programming/anthropic_api_key)
+    export ANTHROPIC_API_KEY=$(cat $HOME/programming/artium-anthropic-key)
 fi
 
 # Preferred editor
 export EDITOR='nvim'
 
-# Homebrew path
-eval "$(/opt/homebrew/bin/brew shellenv)"
+
+alias gpfwl='git push --force-with-lease'
+
+export PATH="$HOME/.asdf/shims:$PATH"

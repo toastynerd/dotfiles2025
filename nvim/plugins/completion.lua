@@ -4,6 +4,9 @@ return {
     "github/copilot.vim",
     lazy = false, -- Load immediately instead of on InsertEnter
     config = function()
+      -- Set Node.js path to handle different asdf versions
+      vim.g.copilot_node_command = '/Users/tmorgan/.asdf/installs/nodejs/22.12.0/bin/node'
+      
       vim.g.copilot_filetypes = {
         ["*"] = true,
       }
