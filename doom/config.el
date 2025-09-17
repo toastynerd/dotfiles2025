@@ -180,6 +180,9 @@
   (global-clipetty-mode)
   (map! :v "SPC z" #'clipetty-kill-ring-save))
 
+;; Start Emacs server automatically for emacsclient access
+(server-start)
+
 ;; GitHub Copilot Configuration
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
