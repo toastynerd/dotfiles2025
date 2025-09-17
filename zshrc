@@ -28,7 +28,6 @@ fi
 # Preferred editor
 export EDITOR='nvim'
 
-
 alias gpfwl='git push --force-with-lease'
 
-export PATH="$HOME/.asdf/shims:$PATH"
+. "$HOME/.local/bin/env"

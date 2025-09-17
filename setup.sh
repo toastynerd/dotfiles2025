@@ -35,6 +35,23 @@ else
     echo "✅ tmux already installed"
 fi
 
+# Install Emacs if not present (for Doom Emacs)
+if ! command -v emacs &> /dev/null; then
+    echo "📝 Installing Emacs..."
+    brew install emacs
+else
+    echo "✅ Emacs already installed"
+fi
+
+# Install Doom Emacs if not present
+if [[ ! -d ~/.config/emacs ]]; then
+    echo "🔥 Installing Doom Emacs..."
+    git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+    ~/.config/emacs/bin/doom install
+else
+    echo "✅ Doom Emacs already installed"
+fi
+
 # Install Nerd Font for icons
 echo "🔤 Installing Nerd Font for icons..."
 if ! brew list --cask font-fira-code-nerd-font &> /dev/null; then
@@ -115,12 +132,35 @@ fi
 echo "🔗 Creating symlink from ~/.tmux.conf to $SCRIPT_DIR/tmux.conf"
 ln -s "$SCRIPT_DIR/tmux.conf" ~/.tmux.conf
 
+# Backup existing doom config if present
+if [[ -d ~/.config/doom ]] && [[ ! -L ~/.config/doom ]]; then
+    echo "📋 Backing up existing doom config to ~/.config/doom.backup"
+    mv ~/.config/doom ~/.config/doom.backup
+fi
+
+# Remove symlink if it exists
+if [[ -L ~/.config/doom ]]; then
+    echo "🔗 Removing existing doom symlink"
+    rm ~/.config/doom
+fi
+
+# Create symlink to this repo's doom config
+echo "🔗 Creating symlink from ~/.config/doom to $SCRIPT_DIR/doom"
+ln -s "$SCRIPT_DIR/doom" ~/.config/doom
+
+# Run doom sync to install packages
+if command -v ~/.config/emacs/bin/doom &> /dev/null; then
+    echo "🔄 Running doom sync to install packages..."
+    ~/.config/emacs/bin/doom sync
+fi
+
 echo ""
 echo "🎉 Setup complete!"
 echo ""
 echo "📋 Installed components:"
 echo "  • Homebrew"
 echo "  • Neovim"
+echo "  • Emacs + Doom Emacs"
 echo "  • tmux"
 echo "  • FiraCode Nerd Font (for icons)"
 echo "  • Language servers:"
@@ -131,6 +171,7 @@ echo "    - pyright (Python)"
 echo ""
 echo "🔗 Symlinks created:"
 echo "  • ~/.config/nvim -> $SCRIPT_DIR/nvim"
+echo "  • ~/.config/doom -> $SCRIPT_DIR/doom"
 echo "  • ~/.tmux.conf -> $SCRIPT_DIR/tmux.conf"
 echo ""
 echo "✨ Your development environment is ready!"
