@@ -36,6 +36,11 @@ agents:
       trigger_keywords: ["write docs", "document", "create readme"]
       file: "documentation_writer.md"
 
+    - name: "typescript-type-checker"
+      description: "Analyzes TypeScript code for type errors and provides type checking"
+      trigger_keywords: ["check types", "typescript errors", "type check", "tsc"]
+      file: "typescript_type_checker.md"
+
 # Agent creation workflow
 agent_creation:
   use_prompt_writer: true
