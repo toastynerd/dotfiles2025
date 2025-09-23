@@ -1,0 +1,49 @@
+# Claude Configuration with Sub-Agent Support
+# This configuration enables Claude to use specialized sub-agents for specific tasks
+
+version: "1.0"
+
+# Main Claude settings
+main:
+  model: "claude-3-opus-20240229"
+  temperature: 0.7
+  max_tokens: 4096
+
+# Sub-agent configuration
+agents:
+  enabled: true
+  base_path: "../agents"
+
+  # List of available sub-agents
+  available:
+    - name: "prompt-writer"
+      description: "Creates optimized prompts for new sub-agents"
+      trigger_keywords: ["create agent", "write prompt", "design agent"]
+      file: "prompt_writer.md"
+
+    - name: "code-reviewer"
+      description: "Reviews code for best practices and potential issues"
+      trigger_keywords: ["review code", "check code", "analyze code"]
+      file: "code_reviewer.md"
+
+    - name: "test-writer"
+      description: "Writes comprehensive test cases"
+      trigger_keywords: ["write tests", "create tests", "test coverage"]
+      file: "test_writer.md"
+
+    - name: "documentation-writer"
+      description: "Creates clear technical documentation"
+      trigger_keywords: ["write docs", "document", "create readme"]
+      file: "documentation_writer.md"
+
+# Agent creation workflow
+agent_creation:
+  use_prompt_writer: true
+  template_path: "../templates/agent_template.md"
+  auto_register: true
+
+# Logging and debugging
+logging:
+  enabled: true
+  level: "info"
+  path: "../logs/claude.log"

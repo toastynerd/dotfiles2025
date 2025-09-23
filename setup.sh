@@ -154,6 +154,29 @@ if command -v ~/.config/emacs/bin/doom &> /dev/null; then
     ~/.config/emacs/bin/doom sync
 fi
 
+# Setup Claude Code configuration
+echo "🤖 Setting up Claude Code configuration..."
+mkdir -p ~/.claude
+
+# Backup and remove existing claude agents symlink if present
+if [[ -L ~/.claude/agents ]]; then
+    echo "🔗 Removing existing claude agents symlink"
+    rm ~/.claude/agents
+fi
+
+# Backup and remove existing claude config symlink if present
+if [[ -L ~/.claude/config ]]; then
+    echo "🔗 Removing existing claude config symlink"
+    rm ~/.claude/config
+fi
+
+# Create symlinks to this repo's claude config
+echo "🔗 Creating symlink from ~/.claude/agents to $SCRIPT_DIR/claude/agents"
+ln -s "$SCRIPT_DIR/claude/agents" ~/.claude/agents
+
+echo "🔗 Creating symlink from ~/.claude/config to $SCRIPT_DIR/claude/config"
+ln -s "$SCRIPT_DIR/claude/config" ~/.claude/config
+
 echo ""
 echo "🎉 Setup complete!"
 echo ""
@@ -173,5 +196,7 @@ echo "🔗 Symlinks created:"
 echo "  • ~/.config/nvim -> $SCRIPT_DIR/nvim"
 echo "  • ~/.config/doom -> $SCRIPT_DIR/doom"
 echo "  • ~/.tmux.conf -> $SCRIPT_DIR/tmux.conf"
+echo "  • ~/.claude/agents -> $SCRIPT_DIR/claude/agents"
+echo "  • ~/.claude/config -> $SCRIPT_DIR/claude/config"
 echo ""
 echo "✨ Your development environment is ready!"
