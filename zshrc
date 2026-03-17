@@ -9,6 +9,9 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
+# add nodenv to path before homebrew
+export PATH="$HOME/.nodenv/shims:$PATH"
+
 # Homebrew path
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
@@ -31,3 +34,10 @@ export EDITOR='nvim'
 alias gpfwl='git push --force-with-lease'
 
 . "$HOME/.local/bin/env"
+
+export GOOGLE_GENAI_USE_VERTEXAI=true 
+export GOOGLE_CLOUD_PROJECT=innov-connector-720215328878 
+export GOOGLE_CLOUD_LOCATION=us-central1
+
+export PATH="$PATH:/Users/tmorgan/go/bin"
+
