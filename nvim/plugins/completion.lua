@@ -56,6 +56,12 @@ return {
       
       -- Copy to system clipboard
       vim.keymap.set('v', '<leader>z', require('osc52').copy_visual, { desc = 'Copy to system clipboard' })
+
+      -- Copy current file path to clipboard
+      vim.keymap.set('n', '<leader>fp', function()
+        local path = vim.fn.expand('%')
+        require('osc52').copy(path)
+      end, { desc = 'Copy file path to clipboard' })
     end,
   },
   

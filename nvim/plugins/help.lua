@@ -28,6 +28,7 @@ return {
           "",
           "📋 CLIPBOARD:",
           "  <Space>z      - Copy to system clipboard (visual mode)",
+          "  <Space>fp     - Copy current file path to clipboard",
           "",
           "ℹ️  HELP:",
           "  <Space>hk     - Show this keybinding help",
