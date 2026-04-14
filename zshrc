@@ -50,6 +50,25 @@ claude-auth() {
   echo "Activated ${name} settings"
 }
 
+claude() {
+  local dir="$HOME/.claude"
+  local matched="default"
+
+  for f in "$dir"/*.settings.json; do
+    local name
+    name="$(basename "$f" .settings.json)"
+    [[ "$name" == "default" ]] && continue
+    if [[ "${PWD:l}" == *"${name:l}"* ]]; then
+      matched="$name"
+      break
+    fi
+  done
+
+  claude-auth "$matched" 2>/dev/null
+  [[ "$matched" != "default" ]] && echo "Using ${matched} settings"
+  command claude "$@"
+}
+
 . "$HOME/.local/bin/env"
 
 export GOOGLE_GENAI_USE_VERTEXAI=true 
