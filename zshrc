@@ -33,6 +33,23 @@ export EDITOR='nvim'
 
 alias gpfwl='git push --force-with-lease'
 
+claude-auth() {
+  local dir="$HOME/.claude"
+  local settings="$dir/settings.json"
+  local name="${1:-default}"
+  local target="$dir/${name}.settings.json"
+
+  if [[ ! -f "$target" ]]; then
+    echo "Error: $target not found" >&2
+    echo "Available configs:" >&2
+    ls "$dir"/*.settings.json 2>/dev/null | xargs -I{} basename {} .settings.json >&2
+    return 1
+  fi
+
+  ln -sf "$target" "$settings"
+  echo "Activated ${name} settings"
+}
+
 . "$HOME/.local/bin/env"
 
 export GOOGLE_GENAI_USE_VERTEXAI=true 

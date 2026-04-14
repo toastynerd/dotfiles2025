@@ -2,6 +2,14 @@
 
 set -e
 
+# Parse flags
+SETUP_EMACS=false
+for arg in "$@"; do
+    case "$arg" in
+        --emacs) SETUP_EMACS=true ;;
+    esac
+done
+
 echo "🚀 Setting up development environment..."
 
 # Check if we're on macOS
@@ -35,21 +43,25 @@ else
     echo "✅ tmux already installed"
 fi
 
-# Install Emacs if not present (for Doom Emacs)
-if ! command -v emacs &> /dev/null; then
-    echo "📝 Installing Emacs..."
-    brew install emacs
-else
-    echo "✅ Emacs already installed"
-fi
+if [[ "$SETUP_EMACS" == true ]]; then
+    # Install Emacs if not present (for Doom Emacs)
+    if ! command -v emacs &> /dev/null; then
+        echo "📝 Installing Emacs..."
+        brew install emacs
+    else
+        echo "✅ Emacs already installed"
+    fi
 
-# Install Doom Emacs if not present
-if [[ ! -d ~/.config/emacs ]]; then
-    echo "🔥 Installing Doom Emacs..."
-    git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
-    ~/.config/emacs/bin/doom install
+    # Install Doom Emacs if not present
+    if [[ ! -d ~/.config/emacs ]]; then
+        echo "🔥 Installing Doom Emacs..."
+        git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+        ~/.config/emacs/bin/doom install
+    else
+        echo "✅ Doom Emacs already installed"
+    fi
 else
-    echo "✅ Doom Emacs already installed"
+    echo "⏭️  Skipping Emacs setup (pass --emacs to include)"
 fi
 
 # Install Nerd Font for icons
@@ -132,26 +144,22 @@ fi
 echo "🔗 Creating symlink from ~/.tmux.conf to $SCRIPT_DIR/tmux.conf"
 ln -s "$SCRIPT_DIR/tmux.conf" ~/.tmux.conf
 
-# Backup existing doom config if present
-if [[ -d ~/.config/doom ]] && [[ ! -L ~/.config/doom ]]; then
-    echo "📋 Backing up existing doom config to ~/.config/doom.backup"
-    mv ~/.config/doom ~/.config/doom.backup
-fi
+if [[ "$SETUP_EMACS" == true ]]; then
+    # Backup existing doom config if present
+    if [[ -d ~/.config/doom ]] && [[ ! -L ~/.config/doom ]]; then
+        echo "📋 Backing up existing doom config to ~/.config/doom.backup"
+        mv ~/.config/doom ~/.config/doom.backup
+    fi
 
-# Remove symlink if it exists
-if [[ -L ~/.config/doom ]]; then
-    echo "🔗 Removing existing doom symlink"
-    rm ~/.config/doom
-fi
+    # Remove symlink if it exists
+    if [[ -L ~/.config/doom ]]; then
+        echo "🔗 Removing existing doom symlink"
+        rm ~/.config/doom
+    fi
 
-# Create symlink to this repo's doom config
-echo "🔗 Creating symlink from ~/.config/doom to $SCRIPT_DIR/doom"
-ln -s "$SCRIPT_DIR/doom" ~/.config/doom
-
-# Run doom sync to install packages
-if command -v ~/.config/emacs/bin/doom &> /dev/null; then
-    echo "🔄 Running doom sync to install packages..."
-    ~/.config/emacs/bin/doom sync
+    # Create symlink to this repo's doom config
+    echo "🔗 Creating symlink from ~/.config/doom to $SCRIPT_DIR/doom"
+    ln -s "$SCRIPT_DIR/doom" ~/.config/doom
 fi
 
 # Setup Claude Code configuration
@@ -177,13 +185,26 @@ ln -s "$SCRIPT_DIR/claude/agents" ~/.claude/agents
 echo "🔗 Creating symlink from ~/.claude/config to $SCRIPT_DIR/claude/config"
 ln -s "$SCRIPT_DIR/claude/config" ~/.claude/config
 
+# Symlink default claude settings
+if [[ -L ~/.claude/default.settings.json ]]; then
+    rm ~/.claude/default.settings.json
+fi
+echo "🔗 Creating symlink from ~/.claude/default.settings.json to $SCRIPT_DIR/claude/settings.json"
+ln -s "$SCRIPT_DIR/claude/settings.json" ~/.claude/default.settings.json
+
+# Bootstrap settings.json to default if not already a symlink
+if [[ ! -L ~/.claude/settings.json ]]; then
+    echo "🔗 Bootstrapping ~/.claude/settings.json -> default"
+    ln -sf ~/.claude/default.settings.json ~/.claude/settings.json
+fi
+
 echo ""
 echo "🎉 Setup complete!"
 echo ""
 echo "📋 Installed components:"
 echo "  • Homebrew"
 echo "  • Neovim"
-echo "  • Emacs + Doom Emacs"
+echo "  • Emacs + Doom Emacs (if --emacs flag passed)"
 echo "  • tmux"
 echo "  • FiraCode Nerd Font (for icons)"
 echo "  • Language servers:"
@@ -194,9 +215,10 @@ echo "    - pyright (Python)"
 echo ""
 echo "🔗 Symlinks created:"
 echo "  • ~/.config/nvim -> $SCRIPT_DIR/nvim"
-echo "  • ~/.config/doom -> $SCRIPT_DIR/doom"
+echo "  • ~/.config/doom -> $SCRIPT_DIR/doom (if --emacs flag passed)"
 echo "  • ~/.tmux.conf -> $SCRIPT_DIR/tmux.conf"
 echo "  • ~/.claude/agents -> $SCRIPT_DIR/claude/agents"
 echo "  • ~/.claude/config -> $SCRIPT_DIR/claude/config"
+echo "  • ~/.claude/default.settings.json -> $SCRIPT_DIR/claude/settings.json"
 echo ""
 echo "✨ Your development environment is ready!"
