@@ -69,6 +69,10 @@ claude() {
   command claude "$@"
 }
 
+clauded() {
+  claude --dangerously-skip-permissions "$@"
+}
+
 . "$HOME/.local/bin/env"
 
 export GOOGLE_GENAI_USE_VERTEXAI=true 
