@@ -9,6 +9,7 @@ ctx=$(jq -r '.context_window.used_percentage // empty' <<<"$input")
 used=$(jq -r '.context_window.total_input_tokens // empty' <<<"$input")
 size=$(jq -r '.context_window.context_window_size // empty' <<<"$input")
 week=$(jq -r '.rate_limits.seven_day.used_percentage // empty' <<<"$input")
+week_reset=$(jq -r '.rate_limits.seven_day.resets_at // empty' <<<"$input")
 
 dir="${cwd/#"$HOME"/\~}"
 
@@ -28,5 +29,9 @@ if [[ -n "$used" && -n "$size" ]]; then
   out+=$' │ \e[33m'"$tok"$'\e[0m'
 fi
 # Weekly plan usage (only present for subscribers, after the first API response)
-[[ -n "$week" ]] && out+=$' │ \e[36m7d '"${week%.*}"$'%\e[0m'
+if [[ -n "$week" ]]; then
+  wk="7d ${week%.*}%"
+  [[ -n "$week_reset" ]] && wk+=" ↻$(date -r "$week_reset" +%a)"
+  out+=$' │ \e[36m'"$wk"$'\e[0m'
+fi
 printf '%s\n' "$out"
