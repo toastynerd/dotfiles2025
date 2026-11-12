@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Claude Code status line. Claude pipes session JSON on stdin; first line of stdout is shown.
-# Format: <model> │ <dir> │ <git branch>[*] │ <context tokens>/<window> (<n>%)
+# Format: <model> │ <dir> │ <git branch>[*] │ <context tokens>/<window> (<n>%) │ 7d <n>%
 input=$(cat)
 
 model=$(jq -r '.model.display_name // "Claude"' <<<"$input")
@@ -8,6 +8,7 @@ cwd=$(jq -r '.workspace.current_dir // .cwd // empty' <<<"$input")
 ctx=$(jq -r '.context_window.used_percentage // empty' <<<"$input")
 used=$(jq -r '.context_window.total_input_tokens // empty' <<<"$input")
 size=$(jq -r '.context_window.context_window_size // empty' <<<"$input")
+week=$(jq -r '.rate_limits.seven_day.used_percentage // empty' <<<"$input")
 
 dir="${cwd/#"$HOME"/\~}"
 
@@ -26,4 +27,6 @@ if [[ -n "$used" && -n "$size" ]]; then
   [[ -n "$ctx" ]] && tok+=" (${ctx%.*}%)"
   out+=$' │ \e[33m'"$tok"$'\e[0m'
 fi
+# Weekly plan usage (only present for subscribers, after the first API response)
+[[ -n "$week" ]] && out+=$' │ \e[36m7d '"${week%.*}"$'%\e[0m'
 printf '%s\n' "$out"
