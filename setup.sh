@@ -185,18 +185,17 @@ ln -s "$SCRIPT_DIR/claude/agents" ~/.claude/agents
 echo "🔗 Creating symlink from ~/.claude/config to $SCRIPT_DIR/claude/config"
 ln -s "$SCRIPT_DIR/claude/config" ~/.claude/config
 
-# Symlink default claude settings
-if [[ -L ~/.claude/default.settings.json ]]; then
-    rm ~/.claude/default.settings.json
+# Symlink claude settings (back up an existing regular file first)
+if [[ -f ~/.claude/settings.json && ! -L ~/.claude/settings.json ]]; then
+    echo "📦 Backing up existing ~/.claude/settings.json to ~/.claude/settings.json.bak"
+    mv ~/.claude/settings.json ~/.claude/settings.json.bak
 fi
-echo "🔗 Creating symlink from ~/.claude/default.settings.json to $SCRIPT_DIR/claude/settings.json"
-ln -s "$SCRIPT_DIR/claude/settings.json" ~/.claude/default.settings.json
+echo "🔗 Creating symlink from ~/.claude/settings.json to $SCRIPT_DIR/claude/settings.json"
+ln -sfn "$SCRIPT_DIR/claude/settings.json" ~/.claude/settings.json
 
-# Bootstrap settings.json to default if not already a symlink
-if [[ ! -L ~/.claude/settings.json ]]; then
-    echo "🔗 Bootstrapping ~/.claude/settings.json -> default"
-    ln -sf ~/.claude/default.settings.json ~/.claude/settings.json
-fi
+# Symlink status line script
+echo "🔗 Creating symlink from ~/.claude/statusline.sh to $SCRIPT_DIR/claude/statusline.sh"
+ln -sfn "$SCRIPT_DIR/claude/statusline.sh" ~/.claude/statusline.sh
 
 echo ""
 echo "🎉 Setup complete!"
@@ -219,6 +218,7 @@ echo "  • ~/.config/doom -> $SCRIPT_DIR/doom (if --emacs flag passed)"
 echo "  • ~/.tmux.conf -> $SCRIPT_DIR/tmux.conf"
 echo "  • ~/.claude/agents -> $SCRIPT_DIR/claude/agents"
 echo "  • ~/.claude/config -> $SCRIPT_DIR/claude/config"
-echo "  • ~/.claude/default.settings.json -> $SCRIPT_DIR/claude/settings.json"
+echo "  • ~/.claude/settings.json -> $SCRIPT_DIR/claude/settings.json"
+echo "  • ~/.claude/statusline.sh -> $SCRIPT_DIR/claude/statusline.sh"
 echo ""
 echo "✨ Your development environment is ready!"

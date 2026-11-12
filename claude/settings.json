@@ -1,4 +1,10 @@
 {
+  "forceLoginMethod": "claudeai",
   "effortLevel": "medium",
-  "autoUpdatesChannel": "latest"
+  "autoUpdatesChannel": "latest",
+  "skipDangerousModePermissionPrompt": true,
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
+  }
 }
